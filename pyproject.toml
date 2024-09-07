@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "giropops-senhas-fastapi"
+version = "0.1.0"
+description = ""
+authors = ["Armando Solheiro"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.114.0"
+redis = "^5.0.8"
+jinja2 = "^3.1.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
