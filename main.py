@@ -1,15 +1,20 @@
-import os
+import http
+import random
 import redis
 import string
-import random
-from fastapi import FastAPI
+import os
+from fastapi import FastAPI, Request, Form
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 
 app = FastAPI(
     title="Giropops Senhas - FastAPI version",
     summary="""Gerador de senhas"""
     )
+
+templates = Jinja2Templates(directory="templates")
 
 app.add_middleware(
     CORSMiddleware,
@@ -42,9 +47,38 @@ def generate_password(size, include_numb, include_special_char):
     return password
 
 
-@app.get("/")
-def index():
+@app.get("/", response_class=HTMLResponse)
+@app.post("/", response_class=HTMLResponse)
+async def index(
+    request: Request,
+    size: int = Form(8),
+    include_numb: bool = Form(False),
+    include_special_char: bool = Form(False),
+    ):
+
+    if request.method == http.HTTPMethod.POST:
+        password = generate_password(
+            size=size, 
+            include_numb=include_numb, 
+            include_special_char=include_special_char,
+            )
+
+        reddisConn.lpush("senhas", password)
+        global generated_password_counter
+        generated_password_counter += 1
+
     passwords = reddisConn.lrange("senhas", 0, 9)
     if passwords:
         generated_passwords = [{"id": index + 1, "senha": password} for index, password in enumerate(passwords)]
-        return rende_template
+        return templates.TemplateResponse(
+            "index.html", 
+            {
+                "request": request,
+                "senhas_geradas": generated_passwords, 
+                "password": generated_passwords[0]['senha'] or '',
+            }
+        )
+    return templates.TemplateResponse(
+        'index.html',
+        {"request": request},
+        )
