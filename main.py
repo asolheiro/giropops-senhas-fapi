@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from prometheus_client import generate_latest
 
 
 app = FastAPI(
@@ -82,3 +83,14 @@ async def index(
         'index.html',
         {"request": request},
         )
+
+@app.get("/api/senhas")
+def list_passwords():
+    passwords = reddisConn.lrange("senhas", 0, 9)
+
+    result = [{"id": index + 1, "senha": senha} for index, senha in enumerate(passwords)]
+    return result
+
+@app.get("/metrics")
+def metrics():
+    return generate_latest()
