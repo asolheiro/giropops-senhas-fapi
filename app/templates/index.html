@@ -9,14 +9,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-  <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet" />
+  <link href="/app/static/css/output.css" rel="stylesheet" />
 </head>
 
 <body>
   <header class="flex justify-center h-24 bg-emerald-200 z-10 shadow-lg fixed top-0 w-full">
     <nav class="flex items-center w-full max-w-4xl whitespace-nowrap">
       <a href="/">
-        <img class="w-40 mr-10" src="{{ url_for('static', filename='linuxtips-logo.png') }}" alt="Logo LINUXtips" />
+        <img class="w-40 mr-10" src="/app/static/linuxtips-logo.png" alt="Logo LINUXtips" />
       </a>
       <h1 class="text-emerald-600 font-bold text-4xl ml-auto mr-16">
         Gerador de Senhas
@@ -79,13 +79,13 @@
           aria-label="atualizar" onclick="buscarUltimasSenhas()">
           <span class="font-emoji">refresh</span>
         </button>
-        {% include 'lista_senhas.html' %}
+        {% include 'password_list.html' %}
     </section>
   </main>
   <footer class="h-32 bg-emerald-700 text-slate-50 w-full flex items-center justify-center">
     <a href="https://linuxtips.io" target="_blank">Criado com 💙 por LinuxTips</a>
   </footer>
 </body>
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="/app/static/js/main.js"></script>
 
 </html>

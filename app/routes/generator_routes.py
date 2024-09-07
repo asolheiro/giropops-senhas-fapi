@@ -1,40 +1,18 @@
 import http
 import random
-import redis
 import string
-import os
-from fastapi import FastAPI, Request, Form
-from fastapi.middleware.cors import CORSMiddleware
+
+from fastapi import Request, Form
 from fastapi.responses import HTMLResponse
+from fastapi.routing import APIRouter
 from fastapi.templating import Jinja2Templates
 from prometheus_client import generate_latest
 
+from redis_db.redis import redisConn
 
-app = FastAPI(
-    title="Giropops Senhas - FastAPI version",
-    summary="""Gerador de senhas"""
-    )
-
+router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headears=["*"],
-)
-
-
-redis_host = os.environ.get('REDIS_HOST, "redis-service')
-redis_port = 6379
-redis_password = ""
-
-reddisConn = redis.StrictRedis(
-    host=redis_host, 
-    port=redis_port, 
-    password=redis_password,
-    decode_responses=True
-    )
 
 def generate_password(size, include_numb, include_special_char):
     char = string.ascii_letters
@@ -48,15 +26,15 @@ def generate_password(size, include_numb, include_special_char):
     return password
 
 
-@app.get("/", response_class=HTMLResponse)
-@app.post("/", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
+@router.post("/", response_class=HTMLResponse)
 async def index(
     request: Request,
     size: int = Form(8),
     include_numb: bool = Form(False),
     include_special_char: bool = Form(False),
     ):
-
+    generated_passwords_counter = 0
     if request.method == http.HTTPMethod.POST:
         password = generate_password(
             size=size, 
@@ -64,11 +42,10 @@ async def index(
             include_special_char=include_special_char,
             )
 
-        reddisConn.lpush("senhas", password)
-        global generated_password_counter
+        redisConn.lpush("senhas", password)
         generated_password_counter += 1
 
-    passwords = reddisConn.lrange("senhas", 0, 9)
+    passwords = redisConn.lrange("senhas", 0, 9)
     if passwords:
         generated_passwords = [{"id": index + 1, "senha": password} for index, password in enumerate(passwords)]
         return templates.TemplateResponse(
@@ -80,17 +57,17 @@ async def index(
             }
         )
     return templates.TemplateResponse(
-        'index.html',
+        "index.html",
         {"request": request},
         )
 
-@app.get("/api/senhas")
+@router.get("/api/senhas")
 def list_passwords():
-    passwords = reddisConn.lrange("senhas", 0, 9)
+    passwords = redisConn.lrange("senhas", 0, 9)
 
     result = [{"id": index + 1, "senha": senha} for index, senha in enumerate(passwords)]
     return result
 
-@app.get("/metrics")
+@router.get("/metrics")
 def metrics():
     return generate_latest()
