@@ -34,8 +34,9 @@ async def index(
     include_numb: bool = Form(False),
     include_special_char: bool = Form(False),
     ):
-    generated_passwords_counter = 0
+    generated_password_counter = 0
     if request.method == http.HTTPMethod.POST:
+        print(size)
         password = generate_password(
             size=size, 
             include_numb=include_numb, 

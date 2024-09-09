@@ -9,14 +9,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-  <link href="/app/static/css/output.css" rel="stylesheet" />
+  <link href="/static/css/output.css" rel="stylesheet" />
 </head>
 
 <body>
   <header class="flex justify-center h-24 bg-emerald-200 z-10 shadow-lg fixed top-0 w-full">
     <nav class="flex items-center w-full max-w-4xl whitespace-nowrap">
       <a href="/">
-        <img class="w-40 mr-10" src="/app/static/linuxtips-logo.png" alt="Logo LINUXtips" />
+        <img class="w-40 mr-10" src="/static/linuxtips-logo.png" alt="Logo LINUXtips" />
       </a>
       <h1 class="text-emerald-600 font-bold text-4xl ml-auto mr-16">
         Gerador de Senhas
@@ -31,17 +31,17 @@
         </div>
         <form class="mt-10 flex flex-col items-center" action="/" method="post">
           <fieldset class="flex justify-between w-full mb-4">
-            <label for="tamanho" class="text-lg mr-8">Tamanho da senha:</label>
-            <input type="range" id="tamanho" name="tamanho" min="8" max="32" value="8" oninput="result.value=value" />
-            <output id="result" for="tamanho" class="ml-4 text-center py-1 rounded bg-slate-300 w-9">8</output>
+            <label for="size" class="text-lg mr-8">Tamanho da senha:</label>
+            <input type="range" id="size" name="size" min="8" max="32" value="8" oninput="result.value=value" />
+            <output id="result" for="size" class="ml-4 text-center py-1 rounded bg-slate-300 w-9">8</output>
           </fieldset>
           <fieldset class="flex self-start mb-4">
-            <input type="checkbox" id="incluir_numeros" name="incluir_numeros" checked />
-            <label for="incluir_numeros" class="ml-2 text-lg">Incluir números</label>
+            <input type="checkbox" id="include-special_char" name="include-special_char" checked />
+            <label for="include_num" class="ml-2 text-lg">Incluir números</label>
           </fieldset>
           <fieldset class="flex self-start mb-6 w-full">
-            <input type="checkbox" id="incluir_caracteres_especiais" name="incluir_caracteres_especiais" checked />
-            <label for="incluir_caracteres_especiais" class="ml-2 text-lg">Incluir caracteres especiais</label>
+            <input type="checkbox" id="include-special_char" name="include-special_char" checked />
+            <label for="indlude_special_char" class="ml-2 text-lg">Incluir caracteres especiais</label>
           </fieldset>
           <button type="submit"
             class="text-slate-50 bg-green-700 p-3 rounded w-40 hover:bg-green-800 text-lg font-bold tracking-wider">
@@ -86,6 +86,6 @@
     <a href="https://linuxtips.io" target="_blank">Criado com 💙 por LinuxTips</a>
   </footer>
 </body>
-<script src="/app/static/js/main.js"></script>
+<script src="/static/js/main.js"></script>
 
 </html>
